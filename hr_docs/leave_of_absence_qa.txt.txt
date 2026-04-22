@@ -1,0 +1,196 @@
+# APPLY FOR LEAVE
+
+Q: How do I apply for leave?
+A: Dashboard > "Apply Leave" > Pick dates > Select leave type > Add reason > Submit
+
+Q: where i apply for leave ?
+A: you apply leave in leave page 
+
+
+Q: Where to apply leave?
+A: Attendance Dashboard > "Apply Leave"
+
+Q: Leave application link?
+A: Go to Attendance Dashboard and click "Apply Leave"
+
+Q: How to request time off?
+A: Dashboard > Apply Leave > Fill details > Submit
+
+# LEAVE LIMITS
+
+Q: How many leaves per month?
+A: Maximum 2 leaves per month normally
+
+Q: Can I take more than 2 leaves?
+A: Yes, but need manager's special approval
+
+Q: Emergency leave limit?
+A: Contact HR directly for emergencies
+
+# NOTICE PERIOD
+
+Q: How many days before should I apply?
+A: • Planned leave: 7 days before
+  • Emergency: Tell manager same day
+  • Medical leave: 30 days if possible
+
+Q: Last minute leave application?
+A: Call manager immediately, then apply in dashboard
+
+# SICK LEAVE
+
+Q: How to take sick leave?
+A: Dashboard > Select "Sick Leave" > Add reason > Submit
+
+Q: Doctor note required?
+A: Yes if sick leave is more than 2 days
+
+Q: Sick leave without certificate?
+A: Only for 1-2 days
+
+# CASUAL LEAVE
+
+Q: How to take casual leave?
+A: Dashboard > Select "Casual Leave" > Apply 2 days before > Get approval
+
+Q: Planned time off?
+A: Use "Casual Leave" option, apply 7 days before
+
+# EMERGENCY LEAVE
+
+Q: Sudden emergency leave?
+A: 1. Call manager now
+  2. Apply in dashboard with "Emergency" tag
+  3. Submit proof within 24 hours
+
+Q: Family emergency leave?
+A: Call manager, then apply as emergency leave
+
+# MEDICAL LEAVE
+
+Q: Long term medical leave?
+A: Contact HR, fill medical forms, provide doctor's note
+
+Q: What is FMLA?
+A: Medical leave for serious health conditions
+
+Q: How to apply FMLA?
+A: Tell HR 30 days before, complete medical forms
+
+Q: Disability leave?
+A: 60% salary for up to 12 weeks with medical proof
+
+# OTHER LEAVES
+
+Q: Leave for family death?
+A: 3-5 days paid bereavement leave, tell HR relationship
+
+Q: Sabbatical leave?
+A: 4 weeks paid after 5 years service, apply 6 months before
+
+Q: Court duty leave?
+A: Paid leave, show court paper to HR
+
+Q: Military leave?
+A: Unpaid up to 5 years, benefits continue, show orders
+
+Q: Unpaid leave?
+A: Ask manager and HR 30 days before, subject to work needs
+
+# DURING LEAVE
+
+Q: Benefits during leave?
+A: Continue, you pay your part before or after leave
+
+Q: Cancel approved leave?
+A: Dashboard > "My Leaves" > Select > "Cancel" > Tell manager
+
+Q: Extend leave?
+A: Apply extension in dashboard, call manager, wait for approval
+
+# RETURN FROM LEAVE
+
+Q: How to return from leave?
+A: • Sick leave: Submit medical clearance
+  • Other leave: Tell manager you're back
+  • Check dashboard for correct status
+
+Q: First day back?
+A: Inform manager, check attendance in dashboard
+
+# LEAVE BALANCE
+
+Q: Check my leave balance?
+A: Dashboard > "Leave Balance"
+
+Q: How many leaves left?
+A: Check Dashboard > Leave Balance section
+
+Q: Remaining leaves?
+A: Dashboard shows total, used, and remaining leaves
+
+Q: Need more than available leaves?
+A: Request "Leave Without Pay" (LWP) with manager approval
+
+Q: No leave balance left?
+A: Apply for unpaid leave (LWP)  
+
+Q: how to apply leave
+A: Dashboard > Apply Leave > Pick dates > Submit
+
+Q: leave application
+A: Go to Attendance Dashboard, click Apply Leave
+
+Q: apply for time off
+A: Dashboard > Apply Leave
+
+Q: sick leave apply
+A: Dashboard > Sick Leave > Add reason > Submit
+
+Q: emergency leave
+A: Call manager now, then apply in dashboard
+
+Q: casual leave
+A: Dashboard > Casual Leave > Apply 2 days before
+
+Q: how many leaves i have
+A: Check Dashboard > Leave Balance
+
+Q: leave balance check
+A: Dashboard > Leave Balance
+
+Q: remaining leaves
+A: Dashboard shows your leave balance
+
+Q: leave without pay
+A: Request LWP if no leaves left, need manager OK
+
+Q: extend my leave
+A: Apply extension in dashboard, call manager
+
+Q: cancel leave
+A: Dashboard > My Leaves > Select > Cancel
+
+Q: medical leave
+A: Contact HR, provide doctor's note
+
+Q: family death leave
+A: 3-5 days paid, tell HR relationship
+
+Q: back from leave
+A: Tell manager, check dashboard
+
+Q: who approve leave
+A: Your manager approves leave
+
+Q: leave not approved
+A: Talk to your manager directly
+
+Q: urgent leave
+A: Call manager immediately, apply later
+
+Q: max leaves per month
+A: 2 leaves normally, more needs approval
+
+Q: leave policy
+A: 2 leaves per month, apply 7 days before for planned leave

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LSIT HR Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --navy: #0d2137; --navy-mid: #163350; --accent: #3b9eff;
+            --accent-dim: rgba(59,158,255,0.12); --surface: #ffffff;
+            --surface-2: #f5f7fa; --surface-3: #eef1f6;
+            --border: rgba(0,0,0,0.08); --text: #0d1b2a; --text-2: #4a6175;
+            --text-3: #8fa3b5; --success: #22c55e; --sidebar-w: 260px;
+            --radius: 14px; --radius-sm: 8px;
+        }
+        body { font-family:'DM Sans',sans-serif; background:var(--surface-2); display:flex; align-items:center; justify-content:center; min-height:100vh; padding:16px; }
+        .shell { width:100%; max-width:1040px; height:92vh; max-height:860px; background:var(--surface); border-radius:20px; border:1px solid var(--border); display:flex; overflow:hidden; box-shadow:0 8px 40px rgba(13,33,55,.10); }
+
+        /* SIDEBAR */
+        .sidebar { width:var(--sidebar-w); background:var(--navy); display:flex; flex-direction:column; flex-shrink:0; overflow:hidden; transition:width .25s ease; }
+        .sidebar.collapsed { width:0; }
+        .sidebar-header { padding:16px 14px 12px; border-bottom:1px solid rgba(255,255,255,.07); flex-shrink:0; }
+        .sidebar-logo { display:flex; align-items:center; gap:9px; margin-bottom:14px; }
+        .logo-icon { width:30px; height:30px; background:rgba(255,255,255,.10); border-radius:8px; display:flex; align-items:center; justify-content:center; }
+        .logo-icon svg { width:16px; height:16px; fill:white; }
+        .logo-text { font-size:13px; font-weight:600; color:white; letter-spacing:.3px; }
+        .btn-new-chat { width:100%; height:36px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); border-radius:var(--radius-sm); color:rgba(255,255,255,.85); font-size:12.5px; font-family:'DM Sans',sans-serif; font-weight:500; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:7px; transition:background .15s; }
+        .btn-new-chat:hover { background:rgba(255,255,255,.14); color:white; }
+        .btn-new-chat svg { width:14px; height:14px; fill:currentColor; }
+        .sidebar-body { flex:1; overflow-y:auto; padding:8px 0; }
+        .sidebar-body::-webkit-scrollbar { width:3px; }
+        .sidebar-body::-webkit-scrollbar-thumb { background:rgba(255,255,255,.12); border-radius:3px; }
+        .session-group-label { font-size:10px; font-weight:600; color:rgba(255,255,255,.30); text-transform:uppercase; letter-spacing:.08em; padding:10px 14px 4px; }
+        .session-item { display:flex; align-items:center; gap:8px; padding:8px 14px; cursor:pointer; transition:background .12s; position:relative; }
+        .session-item:hover { background:rgba(255,255,255,.06); }
+        .session-item.active { background:rgba(59,158,255,.15); }
+        .session-item.active .session-title { color:var(--accent); }
+        .session-icon { width:26px; height:26px; background:rgba(255,255,255,.07); border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+        .session-icon svg { width:12px; height:12px; fill:rgba(255,255,255,.5); }
+        .session-item.active .session-icon { background:rgba(59,158,255,.20); }
+        .session-item.active .session-icon svg { fill:var(--accent); }
+        .session-info { flex:1; overflow:hidden; }
+        .session-title { font-size:12.5px; color:rgba(255,255,255,.75); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:400; }
+        .session-date { font-size:10.5px; color:rgba(255,255,255,.28); margin-top:1px; }
+        .btn-del { width:22px; height:22px; border-radius:5px; border:none; background:transparent; color:rgba(255,255,255,.25); cursor:pointer; display:none; align-items:center; justify-content:center; flex-shrink:0; transition:background .12s, color .12s; }
+        .session-item:hover .btn-del { display:flex; }
+        .btn-del:hover { background:rgba(239,68,68,.2); color:#fca5a5; }
+        .btn-del svg { width:11px; height:11px; fill:currentColor; }
+        .sidebar-empty { padding:32px 14px; text-align:center; color:rgba(255,255,255,.25); font-size:12px; line-height:1.7; }
+
+        /* MAIN */
+        .main { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; position:relative; }
+        .header { background:var(--navy); padding:0 16px; height:58px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+        .header-left { display:flex; align-items:center; gap:10px; }
+        .btn-toggle { width:30px; height:30px; border-radius:7px; border:none; background:rgba(255,255,255,.08); color:rgba(255,255,255,.7); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .15s; }
+        .btn-toggle:hover { background:rgba(255,255,255,.15); color:white; }
+        .btn-toggle svg { width:15px; height:15px; fill:currentColor; }
+        .header-title { font-size:13.5px; font-weight:600; color:white; }
+        .header-sub { font-size:11px; color:rgba(255,255,255,.45); display:flex; align-items:center; gap:5px; }
+        .dot-live { width:6px; height:6px; border-radius:50%; background:var(--success); animation:pulse 2s infinite; }
+        @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(34,197,94,.4)} 70%{box-shadow:0 0 0 5px rgba(34,197,94,0)} 100%{box-shadow:0 0 0 0 rgba(34,197,94,0)} }
+        .btn-icon { width:30px; height:30px; border-radius:7px; border:none; background:rgba(255,255,255,.08); color:rgba(255,255,255,.7); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .15s; }
+        .btn-icon:hover { background:rgba(255,255,255,.15); color:white; }
+        .btn-icon svg { width:14px; height:14px; fill:currentColor; }
+
+        /* MESSAGES */
+        .messages { flex:1; overflow-y:auto; padding:20px 18px; display:flex; flex-direction:column; gap:14px; scroll-behavior:smooth; background:var(--surface-2); }
+        .messages::-webkit-scrollbar { width:4px; }
+        .messages::-webkit-scrollbar-thumb { background:var(--surface-3); border-radius:4px; }
+
+        /* WELCOME */
+        .welcome { display:flex; flex-direction:column; align-items:center; justify-content:center; flex:1; padding:24px 16px; text-align:center; gap:10px; animation:fadeUp .4s ease; }
+        .welcome-icon { width:52px; height:52px; background:var(--accent-dim); border-radius:14px; display:flex; align-items:center; justify-content:center; margin-bottom:4px; }
+        .welcome-icon svg { width:24px; height:24px; fill:var(--accent); }
+        .welcome h2 { font-size:19px; font-weight:500; color:var(--text); }
+        .welcome p { font-size:13px; color:var(--text-2); max-width:300px; line-height:1.6; }
+        .name-row { display:flex; gap:8px; width:100%; max-width:320px; margin-top:6px; }
+        .name-input { flex:1; height:40px; border:1.5px solid var(--border); border-radius:var(--radius-sm); padding:0 13px; font-size:13.5px; font-family:'DM Sans',sans-serif; color:var(--text); background:var(--surface); outline:none; transition:border-color .15s; }
+        .name-input:focus { border-color:var(--accent); }
+        .btn-start { height:40px; padding:0 18px; background:var(--navy); color:white; border:none; border-radius:var(--radius-sm); font-size:13px; font-weight:500; font-family:'DM Sans',sans-serif; cursor:pointer; transition:background .15s; }
+        .btn-start:hover { background:var(--navy-mid); }
+        .welcome-chips { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-top:10px; max-width:380px; }
+        .chip { background:var(--surface-3); border:1px solid var(--border); border-radius:20px; padding:5px 13px; font-size:12px; color:var(--text-2); cursor:pointer; transition:all .15s; }
+        .chip:hover { background:var(--accent-dim); border-color:var(--accent); color:var(--accent); }
+        .change-name-btn { background:none; border:none; color:var(--accent); font-size:11.5px; cursor:pointer; text-decoration:underline; font-family:'DM Sans',sans-serif; margin-top:4px; }
+
+        /* BUBBLES */
+        .msg-row { display:flex; align-items:flex-end; gap:8px; animation:fadeUp .22s ease; }
+        .msg-row.user { flex-direction:row-reverse; }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(7px)} to{opacity:1;transform:translateY(0)} }
+        .avatar { width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:11px; font-weight:600; }
+        .avatar.bot { background:var(--navy); }
+        .avatar.bot svg { width:13px; height:13px; fill:white; }
+        .avatar.user-av { background:var(--accent-dim); color:var(--accent); }
+        .bubble-wrap { max-width:74%; display:flex; flex-direction:column; }
+        .msg-row.user .bubble-wrap { align-items:flex-end; }
+        .bubble { padding:9px 13px; border-radius:var(--radius); font-size:13.5px; line-height:1.65; word-break:break-word; }
+        .bubble.bot { background:var(--surface); color:var(--text); border-bottom-left-radius:4px; border:1px solid var(--border); }
+        .bubble.user { background:var(--navy); color:white; border-bottom-right-radius:4px; }
+        .bubble a { color:var(--accent); text-decoration:underline; }
+        .bubble ul { padding-left:18px; margin:5px 0; }
+        .bubble li { margin-bottom:3px; }
+        .bubble strong { font-weight:600; }
+        .msg-time { font-size:10px; color:var(--text-3); margin-top:4px; padding:0 2px; }
+
+        /* TYPING */
+        .typing-row { display:flex; align-items:flex-end; gap:8px; }
+        .typing-bubble { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); border-bottom-left-radius:4px; padding:11px 14px; display:flex; gap:4px; align-items:center; }
+        .typing-dot { width:5px; height:5px; border-radius:50%; background:var(--text-3); animation:tb 1.3s infinite; }
+        .typing-dot:nth-child(2){animation-delay:.15s}
+        .typing-dot:nth-child(3){animation-delay:.30s}
+        @keyframes tb { 0%,60%,100%{transform:translateY(0);opacity:.5} 30%{transform:translateY(-5px);opacity:1} }
+
+        /* INPUT */
+        .input-area { background:var(--surface); border-top:1px solid var(--border); padding:10px 14px 14px; flex-shrink:0; }
+        .input-row { display:flex; align-items:flex-end; gap:8px; background:var(--surface-2); border:1.5px solid var(--border); border-radius:var(--radius); padding:7px 7px 7px 13px; transition:border-color .15s; }
+        .input-row:focus-within { border-color:var(--accent); }
+        textarea#msgInput { flex:1; background:transparent; border:none; outline:none; resize:none; font-family:'DM Sans',sans-serif; font-size:13.5px; color:var(--text); line-height:1.5; padding:4px 0; max-height:110px; min-height:24px; }
+        textarea#msgInput::placeholder { color:var(--text-3); }
+        .send-btn { width:34px; height:34px; border-radius:8px; border:none; background:var(--navy); color:white; display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer; transition:background .15s, transform .1s; }
+        .send-btn:hover:not(:disabled) { background:var(--navy-mid); }
+        .send-btn:active:not(:disabled) { transform:scale(.93); }
+        .send-btn:disabled { opacity:.4; cursor:not-allowed; }
+        .send-btn svg { width:14px; height:14px; fill:white; }
+        .input-hint { display:flex; justify-content:space-between; margin-top:6px; padding:0 2px; }
+        .hint-text { font-size:11px; color:var(--text-3); }
+
+        /* LOADING OVERLAY */
+        .loading-overlay { position:absolute; inset:0; background:rgba(245,247,250,.7); display:flex; align-items:center; justify-content:center; z-index:10; backdrop-filter:blur(2px); }
+        .spinner { width:22px; height:22px; border:2px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin .7s linear infinite; }
+        @keyframes spin { to{transform:rotate(360deg)} }
+    </style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg></div>
+        <span class="logo-text">LSIT HR</span>
+      </div>
+      <button class="btn-new-chat" id="newChatBtn">
+        <svg viewBox="0 0 24 24"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z"/></svg>
+        New Chat
+      </button>
+    </div>
+    <div class="sidebar-body" id="sessionList">
+      <div class="sidebar-empty">No conversations yet.<br>Start chatting below.</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main" id="mainArea">
+    <div class="header">
+      <div class="header-left">
+        <button class="btn-toggle" id="toggleSidebar">
+          <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+        </button>
+        <div>
+          <div class="header-title" id="headerTitle">HR Assistant</div>
+          <div class="header-sub"><span class="dot-live"></span><span id="headerSub">employee support</span></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px">
+        <button class="btn-icon" id="clearBtn"><svg viewBox="0 0 24 24"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z"/></svg></button>
+      </div>
+    </div>
+
+    <div class="messages" id="messages"></div>
+
+    <div class="input-area">
+      <div class="input-row">
+        <textarea id="msgInput" rows="1" placeholder="Ask about attendance, leave, payroll, or policies…"></textarea>
+        <button class="send-btn" id="sendBtn" disabled>
+          <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
+      <div class="input-hint">
+        <span class="hint-text" id="statusHint">Ready</span>
+        <span class="hint-text">Shift+Enter for new line</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  let userName   = localStorage.getItem('lsit_user_name') || null;
+  let currentSid = null;
+  let isWaiting  = false;
+
+  const messagesEl  = document.getElementById('messages');
+  const msgInput    = document.getElementById('msgInput');
+  const sendBtn     = document.getElementById('sendBtn');
+  const clearBtn    = document.getElementById('clearBtn');
+  const newChatBtn  = document.getElementById('newChatBtn');
+  const sessionList = document.getElementById('sessionList');
+  const headerSub   = document.getElementById('headerSub');
+  const headerTitle = document.getElementById('headerTitle');
+  const statusHint  = document.getElementById('statusHint');
+  const sidebar     = document.getElementById('sidebar');
+
+  function fmtTime(d){ d=d instanceof Date?d:new Date(d); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
+  function fmtDate(s){
+    if(!s) return '';
+    const d=new Date(s), t=new Date(), diff=t-d;
+    if(diff<86400000 && d.getDate()===t.getDate()) return 'Today';
+    if(diff<172800000) return 'Yesterday';
+    return d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  }
+  function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function fmtBot(t){
+    t=t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+    t=t.replace(/^[•\-]\s+(.+)$/gm,'<li>$1</li>');
+    if(t.includes('<li>')) t='<ul>'+t+'</ul>';
+    t=t.replace(/\n/g,'<br>');
+    t=t.replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>');
+    t=t.replace(/([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/g,'<a href="mailto:$1">$1</a>');
+    return t;
+  }
+  function updateHeader(){ headerSub.textContent = userName ? 'welcome, '+userName : 'employee support'; }
+  function scrollBottom(){ messagesEl.scrollTo({top:messagesEl.scrollHeight,behavior:'smooth'}); }
+
+  // Sidebar toggle
+  document.getElementById('toggleSidebar').addEventListener('click',()=>{ sidebar.classList.toggle('collapsed'); });
+
+  // Load sessions
+  async function loadSessions(){
+    try{
+      const r=await fetch('/api/sessions'); const d=await r.json();
+      renderSessions(d.sessions||[]);
+    }catch(e){ console.warn('sessions',e); }
+  }
+
+  function renderSessions(sessions){
+    if(!sessions.length){ sessionList.innerHTML='<div class="sidebar-empty">No conversations yet.<br>Start chatting below.</div>'; return; }
+    const groups={};
+    sessions.forEach(s=>{ const l=fmtDate(s.updated_at||s.created_at); if(!groups[l]) groups[l]=[]; groups[l].push(s); });
+    let html='';
+    for(const [label,items] of Object.entries(groups)){
+      html+=`<div class="session-group-label">${label}</div>`;
+      items.forEach(s=>{
+        const active=s.id===currentSid?'active':'';
+        html+=`<div class="session-item ${active}" data-id="${s.id}">
+          <div class="session-icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div>
+          <div class="session-info">
+            <div class="session-title">${esc(s.title)}</div>
+            <div class="session-date">${fmtDate(s.updated_at)}</div>
+          </div>
+          <button class="btn-del" data-id="${s.id}"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></button>
+        </div>`;
+      });
+    }
+    sessionList.innerHTML=html;
+    sessionList.querySelectorAll('.session-item').forEach(el=>{
+      el.addEventListener('click',e=>{ if(e.target.closest('.btn-del')) return; openSession(parseInt(el.dataset.id)); });
+    });
+    sessionList.querySelectorAll('.btn-del').forEach(btn=>{
+      btn.addEventListener('click',async e=>{
+        e.stopPropagation();
+        if(!confirm('Delete this conversation?')) return;
+        const id=parseInt(btn.dataset.id);
+        await fetch('/api/sessions/'+id,{method:'DELETE'});
+        if(currentSid===id) startNewChat();
+        loadSessions();
+      });
+    });
+  }
+
+  async function openSession(sid){
+    if(currentSid===sid) return;
+    currentSid=sid;
+    const ov=document.createElement('div'); ov.className='loading-overlay'; ov.innerHTML='<div class="spinner"></div>';
+    document.getElementById('mainArea').appendChild(ov);
+    try{
+      const r=await fetch('/api/sessions/'+sid); const data=await r.json();
+      messagesEl.innerHTML='';
+      headerTitle.textContent=data.session&&data.session.title?data.session.title:'Chat';
+      if(data.messages&&data.messages.length){
+        data.messages.forEach(m=>{ if(m.sender==='user') addUserMsg(m.message,new Date(m.created_at)); else addBotMsg(m.message,new Date(m.created_at)); });
+      }
+      sessionList.querySelectorAll('.session-item').forEach(el=>el.classList.toggle('active',parseInt(el.dataset.id)===sid));
+    }catch(e){ console.error(e); } finally{ ov.remove(); }
+  }
+
+  function startNewChat(){
+    currentSid=null; headerTitle.textContent='HR Assistant';
+    messagesEl.innerHTML=''; renderWelcome();
+    sessionList.querySelectorAll('.session-item').forEach(el=>el.classList.remove('active'));
+  }
+  newChatBtn.addEventListener('click',startNewChat);
+  clearBtn.addEventListener('click',startNewChat);
+
+  // Welcome
+  function renderWelcome(){
+    messagesEl.innerHTML='';
+    if(!userName){
+      const el=document.createElement('div'); el.className='welcome'; el.id='welcomeBlock';
+      el.innerHTML=`<div class="welcome-icon"><svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg></div>
+        <h2>Welcome to HR Support</h2><p>Enter your name to get started</p>
+        <div class="name-row"><input type="text" class="name-input" id="nameInput" placeholder="Your name" maxlength="40" autocomplete="off"><button class="btn-start" id="nameSubmit">Start</button></div>
+        <p style="font-size:11px;color:var(--text-3);margin-top:10px;">administration@lsituoe.edu.pk</p>`;
+      messagesEl.appendChild(el);
+      const ni=el.querySelector('#nameInput'); const nb=el.querySelector('#nameSubmit');
+      ni.focus();
+      ni.addEventListener('keypress',e=>{ if(e.key==='Enter'&&ni.value.trim()) saveName(ni.value); });
+      nb.addEventListener('click',()=>{ if(ni.value.trim()) saveName(ni.value); });
+    } else {
+      const hr=new Date().getHours();
+      const g=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
+      const el=document.createElement('div'); el.className='welcome'; el.id='welcomeBlock';
+      el.innerHTML=`<div class="welcome-icon"><svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg></div>
+        <h2>${g}, ${esc(userName)}!</h2><p>What can I help you with today?</p>
+        <div class="welcome-chips">
+          <span class="chip" data-q="How do I mark attendance?">Attendance</span>
+          <span class="chip" data-q="How do I apply for leave?">Apply leave</span>
+          <span class="chip" data-q="When is salary paid?">Salary date</span>
+          <span class="chip" data-q="How do I get my salary slip?">Salary slip</span>
+          <span class="chip" data-q="What training programs are available?">Training</span>
+          <span class="chip" data-q="How do I contact HR?">Contact HR</span>
+        </div>
+        <button class="change-name-btn" id="changeNameBtn">Not ${esc(userName)}? Change name</button>`;
+      messagesEl.appendChild(el);
+      el.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>sendMessage(c.dataset.q)));
+      el.querySelector('#changeNameBtn').addEventListener('click',()=>{ localStorage.removeItem('lsit_user_name'); userName=null; updateHeader(); renderWelcome(); });
+      msgInput.focus();
+    }
+  }
+
+  function saveName(name){
+    userName=name.trim(); localStorage.setItem('lsit_user_name',userName);
+    updateHeader(); messagesEl.innerHTML='';
+    addBotMsg('Hello, **'+esc(userName)+'**! I\'m your LSIT HR Assistant. How can I help you today?');
+    msgInput.focus();
+  }
+
+  function removeWelcome(){ const w=document.getElementById('welcomeBlock'); if(w) w.remove(); }
+
+  const BOT_SVG=`<svg viewBox="0 0 24 24"><path d="M20 9V7c0-1.1-.9-2-2-2h-3c0-1.66-1.34-3-3-3S9 3.34 9 5H6c-1.1 0-2 .9-2 2v2c-1.66 0-3 1.34-3 3s1.34 3 3 3v4c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4c1.66 0 3-1.34 3-3s-1.34-3-3-3zm-2 10H6V7h12v12zm-9-6c-.83 0-1.5-.67-1.5-1.5S8.17 10 9 10s1.5.67 1.5 1.5S9.83 13 9 13zm6 0c-.83 0-1.5-.67-1.5-1.5S14.17 10 15 10s1.5.67 1.5 1.5S15.83 13 15 13z"/></svg>`;
+
+  function addUserMsg(text, date){
+    removeWelcome();
+    const row=document.createElement('div'); row.className='msg-row user';
+    const init=userName?userName[0].toUpperCase():'U';
+    row.innerHTML=`<div class="avatar user-av">${init}</div><div class="bubble-wrap"><div class="bubble user">${esc(text)}</div><div class="msg-time">${fmtTime(date||new Date())}</div></div>`;
+    messagesEl.appendChild(row); scrollBottom();
+  }
+
+  function addBotMsg(text, date){
+    removeWelcome();
+    const row=document.createElement('div'); row.className='msg-row';
+    row.innerHTML=`<div class="avatar bot">${BOT_SVG}</div><div class="bubble-wrap"><div class="bubble bot">${fmtBot(text)}</div><div class="msg-time">${fmtTime(date||new Date())}</div></div>`;
+    messagesEl.appendChild(row); scrollBottom();
+  }
+
+  function showTyping(){
+    removeTyping();
+    const row=document.createElement('div'); row.className='typing-row'; row.id='typingRow';
+    row.innerHTML=`<div class="avatar bot">${BOT_SVG}</div><div class="typing-bubble"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>`;
+    messagesEl.appendChild(row); scrollBottom();
+  }
+  function removeTyping(){ const t=document.getElementById('typingRow'); if(t) t.remove(); }
+
+  async function sendMessage(text){
+    text=(text||msgInput.value).trim();
+    if(!text||isWaiting) return;
+    isWaiting=true; sendBtn.disabled=true;
+    msgInput.value=''; autoResize(); statusHint.textContent='Thinking…';
+    addUserMsg(text); showTyping();
+    try{
+      const body={message:text, user_name:userName||''};
+      if(currentSid) body.session_id=currentSid;
+      const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+      removeTyping();
+      if(!res.ok){
+        const err=await res.json().catch(()=>({}));
+        addBotMsg(err.answer||'Error '+res.status+'. Please contact administration@lsituoe.edu.pk');
+      } else {
+        const data=await res.json();
+        addBotMsg(data.answer||'Sorry, I could not find an answer.');
+        if(!currentSid&&data.session_id){ currentSid=data.session_id; headerTitle.textContent=data.session_title||'Chat'; loadSessions(); }
+        else if(data.session_id){ loadSessions(); }
+      }
+    }catch(e){ removeTyping(); addBotMsg('Connection error. Please contact administration@lsituoe.edu.pk'); }
+    isWaiting=false; sendBtn.disabled=msgInput.value.trim()===''; statusHint.textContent='Ready'; msgInput.focus();
+  }
+
+  function autoResize(){ msgInput.style.height='auto'; msgInput.style.height=Math.min(msgInput.scrollHeight,110)+'px'; }
+  msgInput.addEventListener('input',()=>{ autoResize(); sendBtn.disabled=msgInput.value.trim()===''||isWaiting; });
+  msgInput.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendMessage(); } });
+  sendBtn.addEventListener('click',()=>sendMessage());
+
+  fetch('/api/health').then(r=>r.json()).then(d=>{ statusHint.textContent=(d.qa_pairs||0)+' answers loaded'; }).catch(()=>{ statusHint.textContent='Backend offline'; });
+
+  updateHeader(); renderWelcome(); loadSessions();
+})();
+</script>
+</body>
+</html>

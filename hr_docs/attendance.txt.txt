@@ -1,0 +1,122 @@
+# MARKING ATTENDANCE
+
+Q: Where do I mark my attendance?
+A: Go to Attendance Dashboard: https://portal.company.com/attendance
+
+Q: Where is the attendance dashboard?
+A: https://portal.company.com/attendance
+
+Q: How do I check in?
+A: Login to dashboard and click "Check In" button
+
+Q: How do I check out?
+A: Login to dashboard and click "Check Out" button
+
+Q: What are my work hours?
+A: 9:00 AM to 5:00 PM (Monday-Friday)
+
+Q: What is the grace period?
+A: You can check in until 9:15 AM without being late
+
+# LATE ARRIVAL
+
+Q: When am I considered late?
+A: After 9:15 AM
+
+Q: What happens if I'm late?
+A: • 9:15-9:30 AM = Marked late
+  • After 9:30 AM = 1 hour leave deducted
+  • After 10:00 AM = Half day marked
+
+Q: How do I report being late?
+A: Dashboard > "Report Late Arrival" > Select reason > Submit
+
+Q: I'm coming late today. What to do?
+A: 1. Mark "Report Late Arrival" in dashboard
+  2. Tell your manager
+
+# ATTENDANCE PROBLEMS
+
+Q: I forgot to mark attendance. What now?
+A: Dashboard > "Missed Punch" within 24 hours > Add time and reason > Submit
+
+Q: I forgot to check in/out. Help?
+A: Go to "Missed Punch" option in dashboard and fix it
+
+Q: Attendance system is down. What to do?
+A: Email attendance@company.com with:
+  • Your name and ID
+  • Time you came/left
+  • Error screenshot
+
+Q: My attendance is wrong. How to fix?
+A: Dashboard > "Request Correction" > Select date > Fix time > Submit
+
+Q: Who do I contact for attendance help?
+A: • System issues: IT Helpdesk (ext. 7777)
+  • Wrong entries: attendance@company.com
+  • Rules & policies: HR (ext. 1234)
+
+# WORK FROM HOME
+
+Q: How to mark WFH attendance?
+A: Dashboard > Select "Work From Home" > Check in at 9 AM > Check out at 5 PM
+
+Q: I'm working from home. How to mark?
+A: Same as office - use dashboard and select "WFH" mode
+
+# CHECK ATTENDANCE
+
+Q: How to check my attendance record?
+A: Dashboard > "Summary Report"
+
+Q: How many days was I present?
+A: Check Dashboard > "Summary Report"
+
+Q: How many times was I late?
+A: Dashboard > "Summary Report" shows all late entries
+
+Q: Check my leave balance?
+A: Dashboard > "Summary Report" > Leave Balance section
+
+Q: Show my attendance summary?
+A: Go to Dashboard > "Summary Report" for complete details 
+
+Q: where i mark attendance
+A: https://portal.company.com/attendance
+
+Q: attendance website link
+A: https://portal.company.com/attendance
+
+Q: attendance portal
+A: https://portal.company.com/attendance
+
+Q: how to check in
+A: Login to dashboard and click "Check In"
+
+Q: how to check out
+A: Login to dashboard and click "Check Out"
+
+Q: what time to come
+A: 9:00 AM
+
+Q: what time to leave
+A: 5:00 PM
+
+Q: late coming rule
+A: After 9:15 AM is late
+
+Q: forgot to mark
+A: Use "Missed Punch" in dashboard within 24 hours
+
+Q: system not working
+A: Email attendance@company.com with your name, ID, and time
+
+Q: wfh attendance
+A: Use same dashboard, select "Work From Home" mode
+
+Q: check my attendance
+A: Dashboard > "Summary Report"
+
+Q: leave balance
+A: Check in Dashboard > "Summary Report"

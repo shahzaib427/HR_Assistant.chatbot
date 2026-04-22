@@ -1,0 +1,44 @@
+Q: How do I reset my password?
+A: Go to the login page and click "Forgot Password." Enter your  email address, and you'll receive an email with instructions to reset your password. The email will contain a temporary password or reset link that expires within 24 hours. For security reasons, you'll be prompted to create a new password upon first login.
+
+Q: I didn't receive the password reset email. What should I do?
+A: First, check your spam or junk folder. If you still don't see it, wait 5-10 minutes as emails can sometimes be delayed. If you still haven't received it, contact the IT helpdesk at ext. 7777 or helpdesk@company.com for assistance.
+
+Q: What are the password requirements?
+A: Passwords must be at least 12 characters long and include uppercase and lowercase letters, numbers, and special characters. Passwords expire every 90 days, and you cannot reuse your last 5 passwords.
+
+Q: What software is available for employees?
+A: Standard software includes Microsoft Office 365, Slack, Zoom, and project management tools. Additional software requires IT approval.
+
+Q: How do I get technical support?
+A: Submit a ticket through the IT portal, email helpdesk@company.com, or call ext. 7777. Priority for critical issues.
+
+Q: Can I install personal software?
+A: Only IT-approved software can be installed on company devices. Submit requests through the IT portal for review.
+
+Q: How do I connect to the VPN?
+A: Download and install the VPN client from the IT portal. Use your company credentials to connect when working remotely.
+
+Q: What is the email storage limit?
+A: Email storage is limited to 25GB. Archive old emails to local folders or delete unnecessary messages to stay under limit.
+
+Q: How do I request new hardware?
+A: Submit hardware requests through the IT portal with manager approval. Standard replacement cycle is every 3 years.
+
+Q: What should I do if my laptop is stolen?
+A: Immediately report to IT to disable access and to local police. File a police report and submit to HR and IT.
+
+Q: How do I set up email on my phone?
+A: Follow the mobile device setup guide on the IT portal. Company data requires device encryption and passcode protection.
+
+Q: What is the video conferencing policy?
+A: Use company-approved platforms (Zoom/Teams) for all meetings. Test equipment before important calls. Use backgrounds when appropriate.
+
+Q: How do I enable two-factor authentication?
+A: Go to the security settings in your account profile. Select "Enable 2FA" and follow the prompts to link your preferred authenticator app or phone number.
+
+Q: What should I do if I'm locked out of my account?
+A: After multiple failed login attempts, your account will be locked for 30 minutes. Wait and try again, or use the "Forgot Password" option. For immediate assistance, contact IT support.
+
+Q: How do I update my recovery email or phone number?
+A: Log into your account profile and navigate to Security Settings. Update your recovery options under "Account Recovery Information."

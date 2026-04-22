@@ -1,0 +1,188 @@
+# PAYDAY
+
+Q: When is payday?
+A: Every other Friday
+
+Q: What are pay dates?
+A: Bi-weekly on Fridays
+
+Q: When will I get paid?
+A: Every other Friday
+
+Q: What if payday is a holiday?
+A: You get paid on the previous working day
+
+# PAY SLIPS
+
+Q: Where do I get my pay slip?
+A: Employee Portal > "Payroll" > "View Pay Stubs"
+
+Q: How to download pay slip?
+A: Portal > Payroll > View Pay Stubs > Download PDF
+
+Q: I need my salary slip. Where to find?
+A: Login to Employee Portal, go to Payroll section
+
+Q: Can I get paper pay slip?
+A: Yes, request from HR for paper copy
+
+Q: How to check my salary online?
+A: Portal > Payroll > View Pay Stubs
+
+Q: View my last paycheck?
+A: Portal > Payroll > Payment History
+
+# DIRECT DEPOSIT
+
+Q: How to set up direct deposit?
+A: Portal > Payroll Settings > Direct Deposit > Add bank details
+
+Q: Where do I put my bank details for salary?
+A: Portal > Payroll Settings > Direct Deposit
+
+Q: Can I split salary in two accounts?
+A: Yes, you can split % between checking and savings
+
+Q: How many bank accounts for salary?
+A: You can add up to 3 different accounts
+
+# PAYMENT PROBLEMS
+
+Q: Wrong amount in salary. What to do?
+A: Email administration@lsituoe.edu.pk with your ID and error details
+
+Q: Salary not credited. Help?
+A: 1. Check bank details in portal
+  2. Email administration@lsituoe.edu.pk
+
+Q: Didn't receive salary. Who to contact?
+A: Email administration@lsituoe.edu.pk immediately
+
+Q: Paycheck error. How to report?
+A: Email administration@lsituoe.edu.pk with screenshot
+
+Q: My salary is wrong. Who to email?
+A: administration@lsituoe.edu.pk
+
+# TAX & FORMS
+
+Q: How to change tax deductions?
+A: Portal > Payroll > Tax Forms > Update W-4
+
+Q: Need my W-2 form. Where to get?
+A: Portal > Tax Documents > Download W-2
+
+Q: Old W-2 required. How to get?
+A: Email administration@lsituoe.edu.pk for old W-2
+
+Q: Update my tax information?
+A: Portal > Payroll > Tax Forms
+
+# TIME & OVERTIME
+
+Q: How to track my work hours?
+A: Clock in/out daily in time tracking system
+
+Q: How to request overtime?
+A: Submit in time system, get manager approval
+
+Q: Overtime payment rate?
+A: 1.5 times normal pay
+
+Q: Need overtime approval. How?
+A: Submit request 24 hours in advance in time system
+
+# DEDUCTIONS
+
+Q: What is deducted from my salary?
+A: Tax, Social Security, Medicare, plus benefits you chose
+
+Q: Why is tax deducted?
+A: Federal and state tax as per law
+
+Q: Change my deductions?
+A: Update during open enrollment or within 30 days of life change
+
+# PAY HISTORY
+
+Q: See old pay slips?
+A: Portal > Payroll > Payment History (last 24 months)
+
+Q: Need proof of income?
+A: Portal > Payroll > Employment Verification > Generate letter
+
+Q: Previous year salary slips?
+A: Email administration@lsituoe.edu.pk for old records
+
+# SALARY ADVANCE
+
+Q: Can I get salary advance?
+A: In emergency cases only, contact HR
+
+Q: Advance salary maximum?
+A: Up to 40% of monthly salary
+
+Q: Salary advance repayment?
+A: Must repay within 3 months
+
+# HELP & CONTACTS
+
+Q: Payroll department email?
+A: administration@lsituoe.edu.pk
+
+Q: Who to contact for payroll help?
+A: Email administration@lsituoe.edu.pk
+
+Q: Payroll phone number?
+A: Extension 4567
+
+Q: Portal not working for payroll?
+A: Contact IT helpdesk@company.com 
+
+Q: where i get my pay slip
+A: Employee Portal > Payroll > View Pay Stubs
+
+Q: pay slip link
+A: Login to Portal, go to Payroll section
+
+Q: download salary slip
+A: Portal > Payroll > View Pay Stubs > Download
+
+Q: check my salary online
+A: Portal > Payroll > View Pay Stubs
+
+Q: view my payslip
+A: Portal > Payroll section
+
+Q: salary not credited
+A: Email administration@lsituoe.edu.pk
+
+Q: wrong salary amount
+A: Email administration@lsituoe.edu.pk with details
+
+Q: payday date
+A: Every other Friday
+
+Q: when is next payday
+A: Check calendar - paid bi-weekly on Fridays
+
+Q: set up direct deposit
+A: Portal > Payroll Settings > Direct Deposit
+
+Q: change bank for salary
+A: Portal > Payroll Settings > Update Direct Deposit
+
+Q: tax form update
+A: Portal > Payroll > Tax Forms
+
+Q: get my W-2
+A: Portal > Tax Documents
+
+Q: overtime rate
+A: 1.5x normal pay
+
+Q: payroll contact email
+A: administration@lsituoe.edu.pk
+
+Q: payroll helpline
+A: Extension 4567

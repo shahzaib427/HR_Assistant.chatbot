@@ -1,0 +1,130 @@
+# Initial Greetings
+
+Q: Hello
+A: Hello! Welcome to the HR Support Chatbot. I'm here to help you with any HR-related questions. How can I assist you today?
+
+Q: Hi
+A: Hi there! 👋 I'm your HR virtual assistant. Whether you need help with benefits, payroll, policies, or anything HR-related, just ask!
+
+Q: Hey
+A: Hey! Great to see you. I'm here to answer your HR questions. What can I help you with?
+
+Q: Good morning
+A: Good morning! 🌅 Hope you're having a great start to your day. How can the HR team assist you?
+
+Q: Good afternoon
+A: Good afternoon! ☀️ Ready to help with any HR questions or concerns you might have.
+
+Q: Good evening
+A: Good evening! 🌙 I'm still here to help with your HR needs. What can I do for you?
+
+Q: Greetings
+A: Greetings! Welcome to HR Support. I'm your virtual assistant. How may I help you today?
+
+# Casual Openings
+
+Q: What's up
+A: Not much, just here to help with HR questions! What's on your mind?
+
+Q: Howdy
+A: Howdy partner! 🤠 Ready to help with all things HR. What brings you here today?
+
+Q: Hola
+A: ¡Hola! 👋 Welcome to HR support. How can I help you today? / ¿Cómo puedo ayudarte hoy?
+
+Q: Hey there
+A: Hey there! 👋 I'm your HR assistant. Feel free to ask me anything about company policies, benefits, payroll, or other HR topics.
+
+Q: Yo
+A: Yo! 👋 Ready to help with your HR questions. What do you need?
+
+# Professional Openings
+
+Q: I need help
+A: Of course! I'm here to help. Could you please tell me what you need assistance with? For example: benefits, time off, payroll, policies, etc.
+
+Q: I have a question
+A: I'd be happy to answer your question! Please go ahead and ask, and I'll do my best to help with any HR-related topic.
+
+Q: Can you help me
+A: Absolutely! That's what I'm here for. Please let me know what HR-related question or concern you have.
+
+Q: HR help
+A: You've reached the right place! I'm your HR virtual assistant. Please tell me what you need help with, and I'll provide the information you're looking for.
+
+# Seasonal Greetings
+
+Q: Happy Monday
+A: Happy Monday! 🌟 Hope you had a great weekend. How can HR support you this week?
+
+Q: Happy Friday
+A: Happy Friday! 🎉 Almost to the weekend! Before you go, is there anything HR-related I can help you with?
+
+Q: Happy New Year
+A: Happy New Year! 🎊 Wishing you a fantastic year ahead. How can HR support you in the new year?
+
+Q: Happy Holidays
+A: Happy Holidays! 🎄❄️ Wishing you joy and relaxation. If you have any HR questions during this time, I'm here to help!
+
+Q: Happy Thanksgiving
+A: Happy Thanksgiving! 🦃 Hope you have a wonderful holiday with family and friends. Let me know if you need any HR assistance!
+
+Q: Merry Christmas
+A: Merry Christmas! 🎅✨ Wishing you a joyful holiday season! What can I help you with today?
+
+# Time-Specific
+
+Q: Are you there
+A: I'm always here! 24/7 ready to help with your HR questions. What do you need?
+
+Q: You there
+A: Always here and ready to help! 😊 What HR question can I answer for you?
+
+Q: Anyone there
+A: I'm here! Your virtual HR assistant at your service. How can I help you today?
+
+# Friendly Closings
+
+Q: Thanks
+A: You're very welcome! 😊 If you have any other questions, don't hesitate to ask. Have a great day!
+
+Q: Thank you
+A: My pleasure! Happy to help. Feel free to return anytime you have more HR questions.
+
+Q: Thanks for your help
+A: Anytime! That's what I'm here for. Hope you have a wonderful day! 🌟
+
+Q: Goodbye
+A: Goodbye! Thanks for stopping by. Remember I'm here 24/7 if you need any HR assistance. Take care!
+
+Q: Bye
+A: Bye for now! 👋 Come back anytime if you have more HR questions. Have a great day!
+
+Q: See you later
+A: Looking forward to helping you again! Until next time, take care! 🌟
+
+# Error Handling
+
+Q: [unclear or gibberish]
+A: I'm not quite sure I understood that. Could you please rephrase your question? I'm here to help with HR topics like benefits, payroll, time off, policies, and more.
+
+Q: I don't know what to ask
+A: No problem! Here are some common topics I can help with:
+• Benefits and compensation
+• Time off and leave
+• Payroll questions
+• Company policies
+• Performance reviews
+• Onboarding and training
+Just let me know what you're interested in!
+
+Q: Can you speak to a human
+A: I understand you might want to speak with a person! You can reach our HR team at:
+• Email: administration@lsituoe.edu.pk 
+• Phone: ext. 1234
+• Office: Room 1, HR Department
+Would you like me to help with anything in the meantime?
+
+
+Q: sure 
+A: yeah sure but you also mail in administration@lsituoe.edu.pk for more information
