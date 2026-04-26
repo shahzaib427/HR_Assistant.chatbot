@@ -1,8 +1,7 @@
 import os
-import torch
 import requests
 import logging
-from sentence_transformers import SentenceTransformer
+import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import re
 from datetime import datetime
@@ -16,11 +15,28 @@ CONFIG = {
     'max_context_docs': 2,
 }
 
-torch.set_num_threads(2)
+# ── HuggingFace Inference API for embeddings (no local torch) ───────────────────
+HF_API_KEY = os.environ.get("HUGGINGFACE_API_KEY", "")
+HF_EMBED_URL = "https://api-inference.huggingface.co/pipeline/feature-extraction/sentence-transformers/all-MiniLM-L6-v2"
 
-# ── Embedding model (no T5 — saves ~1.5GB RAM) ─────────────────────────────────
-embed_model = SentenceTransformer("all-MiniLM-L6-v2")
-print("Embedding model loaded!")
+def get_embeddings(texts: List[str]) -> Optional[np.ndarray]:
+    if not HF_API_KEY:
+        logger.warning("No HuggingFace API key set")
+        return None
+    try:
+        response = requests.post(
+            HF_EMBED_URL,
+            headers={"Authorization": f"Bearer {HF_API_KEY}"},
+            json={"inputs": texts, "options": {"wait_for_model": True}},
+            timeout=30
+        )
+        if response.status_code == 200:
+            return np.array(response.json())
+        logger.error(f"HF embed error: {response.status_code} {response.text}")
+        return None
+    except Exception as e:
+        logger.error(f"HF embed exception: {e}")
+        return None
 
 # ── Groq LLM fallback (free) ───────────────────────────────────────────────────
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
@@ -143,17 +159,22 @@ else:
             except Exception as e:
                 print(f"  Error loading {filename}: {e}")
     print(f"Total: {len(knowledge_base)} knowledge chunks loaded")
-    if knowledge_base:
-        print("Creating embeddings...")
-        embeddings = embed_model.encode(knowledge_base, show_progress_bar=True)
-        print("Embeddings ready!")
+    if knowledge_base and HF_API_KEY:
+        print("Creating embeddings via HuggingFace API...")
+        embeddings = get_embeddings(knowledge_base)
+        if embeddings is not None:
+            print("Embeddings ready!")
+        else:
+            print("Warning: embeddings failed, RAG disabled")
 
 
 # ── Search ─────────────────────────────────────────────────────────────────────
 def search_docs(query: str, top_k: int = 3) -> List[Dict]:
     if not knowledge_base or embeddings is None:
         return []
-    query_emb = embed_model.encode([query])
+    query_emb = get_embeddings([query])
+    if query_emb is None:
+        return []
     sims = cosine_similarity(query_emb, embeddings)[0]
     top_k_actual = min(top_k * 3, len(sims))
     top_indices = sims.argsort()[-top_k_actual:][::-1]
@@ -315,7 +336,6 @@ def generate_answer(question: str) -> str:
             if best_answer.startswith('Q:'):
                 best_answer = best_answer.split('A:')[-1].strip()
             return best_answer
-        # RAG found docs but no clean answer — use LLM with context
         context = "\n\n".join([d['content'] for d in relevant_docs[:2]])
         return llm_fallback(question, context)
 
@@ -386,21 +406,4 @@ def predict(data: dict) -> dict:
 
 # ── CLI ────────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
-    stats = get_document_stats()
-    print("\n" + "=" * 50)
-    print("LSIT HR Assistant (RAG + Groq fallback)")
-    print("=" * 50)
-    print(f"Loaded: {len(knowledge_base)} chunks | Groq: {'enabled' if GROQ_API_KEY else 'disabled (set GROQ_API_KEY)'}")
-    print("Type 'exit' to quit\n")
-    while True:
-        question = input("You: ").strip()
-        if question.lower() in ["exit", "quit", "bye"]:
-            print("Bot: Goodbye!")
-            break
-        if not question:
-            continue
-        start = datetime.now()
-        answer = generate_answer(question)
-        elapsed = (datetime.now() - start).total_seconds()
-        print(f"Bot: {answer}")
-        print(f"({elapsed:.2f}s)\n")
+    print(f"Loaded: {len(knowledge_base)} chunks | Groq: {'enabled' if GROQ_API_KEY else 'disabled'}")
