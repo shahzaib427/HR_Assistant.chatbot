@@ -11,11 +11,11 @@ logger = logging.getLogger(__name__)
 
 # ── Config ──────────────────────────────────────────────────────────────────────
 CONFIG = {
-    'min_similarity_threshold': 0.35,
-    'max_context_docs': 2,
+    'min_similarity_threshold': 0.30,
+    'max_context_docs': 3,
 }
 
-# ── HuggingFace Inference API for embeddings (no local torch) ───────────────────
+# ── HuggingFace Inference API for embeddings ────────────────────────────────────
 HF_API_KEY = os.environ.get("HUGGINGFACE_API_KEY", "")
 HF_EMBED_URL = "https://api-inference.huggingface.co/pipeline/feature-extraction/sentence-transformers/all-MiniLM-L6-v2"
 
@@ -31,7 +31,9 @@ def get_embeddings(texts: List[str]) -> Optional[np.ndarray]:
             timeout=30
         )
         if response.status_code == 200:
-            return np.array(response.json())
+            result = response.json()
+            # HF returns list of lists
+            return np.array(result)
         logger.error(f"HF embed error: {response.status_code} {response.text}")
         return None
     except Exception as e:
@@ -165,7 +167,7 @@ else:
         if embeddings is not None:
             print("Embeddings ready!")
         else:
-            print("Warning: embeddings failed, RAG disabled")
+            print("Warning: embeddings failed, RAG disabled — keyword matching still active")
 
 
 # ── Search ─────────────────────────────────────────────────────────────────────
@@ -206,7 +208,7 @@ def get_best_answer_from_context(question: str, context_docs: List[Dict]) -> Opt
     common_words = {
         'where', 'what', 'how', 'do', 'i', 'my', 'the', 'a', 'an', 'is',
         'are', 'to', 'for', 'can', 'you', 'help', 'me', 'please', 'am',
-        'would', 'like', 'need', 'want', 'does', 'have'
+        'would', 'like', 'need', 'want', 'does', 'have', 'we', 'our'
     }
     question_words = {w for w in question_lower.split() if len(w) > 2} - common_words
 
@@ -220,7 +222,7 @@ def get_best_answer_from_context(question: str, context_docs: List[Dict]) -> Opt
         source_boost = 0
         if 'payroll' in source and any(k in question_lower for k in ['salary', 'paid', 'bank', 'pay']):
             source_boost = 0.3
-        if 'attendance' in source and any(k in question_lower for k in ['attendance', 'check', 'mark']):
+        if 'attendance' in source and any(k in question_lower for k in ['attendance', 'check', 'mark', 'attendence']):
             source_boost = 0.3
         if 'leave' in source and any(k in question_lower for k in ['leave', 'vacation', 'holiday']):
             source_boost = 0.3
@@ -244,8 +246,12 @@ def get_best_answer_from_context(question: str, context_docs: List[Dict]) -> Opt
                 ('bank', ['bank', 'account']),
                 ('update', ['update', 'change']),
                 ('attend', ['attend', 'mark']),
+                ('attendence', ['attend', 'mark']),
                 ('leave', ['leave', 'vacation']),
                 ('check', ['check', 'login']),
+                ('slip', ['slip', 'payroll']),
+                ('increment', ['increment', 'raise']),
+                ('training', ['training', 'course']),
             ]:
                 if user_kw in question_lower and any(k in q_lower for k in doc_kws):
                     keyword_score += 0.4
@@ -265,9 +271,10 @@ def get_best_answer_from_context(question: str, context_docs: List[Dict]) -> Opt
 def get_simple_response(question: str) -> Optional[str]:
     q = question.lower().strip()
     greetings = ["hi", "hello", "hey", "hii", "helloo", "greetings",
-                 "good morning", "good afternoon", "good evening", "salam"]
+                 "good morning", "good afternoon", "good evening", "salam",
+                 "assalam", "assalamualaikum"]
     acknowledgments = ["ok", "okay", "thanks", "thank you", "got it",
-                       "sure", "fine", "cool", "nice", "alright"]
+                       "sure", "fine", "cool", "nice", "alright", "shukria"]
     if any(q == g or q.startswith(g + " ") for g in greetings):
         return (
             "Hello! I'm the LSIT HR Assistant. I can help you with:\n"
@@ -282,29 +289,77 @@ def get_simple_response(question: str) -> Optional[str]:
     return None
 
 
+# ── Flexible keyword matching ──────────────────────────────────────────────────
+def match_quick_answer(q_lower: str) -> Optional[str]:
+    # Direct substring match first
+    for key, response in QUICK_ANSWERS.items():
+        if key in q_lower:
+            return response
+
+    # Flexible word overlap match
+    q_words = set(q_lower.split())
+    best_match = None
+    best_overlap = 0
+    for key, response in QUICK_ANSWERS.items():
+        key_words = set(key.split())
+        overlap = len(key_words & q_words)
+        if overlap >= max(1, len(key_words) - 1) and overlap > best_overlap:
+            best_overlap = overlap
+            best_match = response
+
+    return best_match
+
+
 # ── Quick keyword answers ──────────────────────────────────────────────────────
 QUICK_ANSWERS = {
+    # Attendance
     "check in": "Click 'Check In' on the LSIT HR portal (https://lsit.edu.pk/attendance) or LSIT Connect app before 10:00 AM daily. After 10:00 AM it is marked as late.",
     "check out": "Click 'Check Out' at end of day on the LSIT HR portal or LSIT Connect app. Required for accurate attendance records.",
-    "where to mark attendance": "Log in to https://lsit.edu.pk/attendance or use the LSIT Connect mobile app. Click Check In at start and Check Out at end of day.",
-    "forgot attendance": "Contact administration@lsituoe.edu.pk within 24 hours with your employee ID and date to get attendance rectified.",
-    "late check in": "Any check-in after 10:00 AM is marked as late in your attendance record.",
+    "mark attendance": "Log in to https://lsit.edu.pk/attendance or use the LSIT Connect mobile app. Click Check In at start and Check Out at end of day.",
+    "mark attendence": "Log in to https://lsit.edu.pk/attendance or use the LSIT Connect mobile app. Click Check In at start and Check Out at end of day.",
+    "where attendance": "Log in to https://lsit.edu.pk/attendance or use the LSIT Connect mobile app. Click Check In at start and Check Out at end of day.",
     "attendance portal": "Access attendance at https://lsit.edu.pk/attendance using your LSIT credentials.",
+    "forgot attendance": "Contact administration@lsituoe.edu.pk within 24 hours with your employee ID and date to get attendance rectified.",
+    "missed attendance": "Contact administration@lsituoe.edu.pk within 24 hours with your employee ID and date to get attendance rectified.",
+    "late check in": "Any check-in after 10:00 AM is marked as late in your attendance record.",
+    "attendance system": "Use the LSIT HR portal at https://lsit.edu.pk/attendance or the LSIT Connect mobile app for all attendance needs.",
+
+    # Leave
     "leave balance": "Check your leave balance in the LSIT HR portal under 'Leave Balance'. For queries: hr@lsituoe.edu.pk",
+    "check leave": "Check your leave balance in the LSIT HR portal under 'Leave Balance'. For queries: hr@lsituoe.edu.pk",
     "apply leave": "Log into LSIT HR portal → Leave Requests → fill the form with dates and reason → submit. Planned leave needs 3 days advance notice.",
+    "leave apply": "Log into LSIT HR portal → Leave Requests → fill the form with dates and reason → submit. Planned leave needs 3 days advance notice.",
+    "how to apply leave": "Log into LSIT HR portal → Leave Requests → fill the form with dates and reason → submit. Planned leave needs 3 days advance notice.",
     "annual leave": "You get 20 days annual leave per year.",
     "sick leave": "You get 10 days sick leave per year. Notify your manager by 9:00 AM on the day of absence.",
     "casual leave": "You get 5 days casual leave per year for urgent personal matters.",
+    "leave types": "LSIT offers: Annual Leave (20 days), Sick Leave (10 days), and Casual Leave (5 days) per year.",
+    "how many leaves": "LSIT offers: Annual Leave (20 days), Sick Leave (10 days), and Casual Leave (5 days) per year.",
+
+    # Salary / Payroll
     "when is salary": "Salary is credited to your bank account between the 5th and 7th of each month.",
     "salary date": "Salary is processed between 5th-7th of each month. If this falls on a weekend/holiday, processed on the previous working day.",
+    "salary day": "Salary is credited to your bank account between the 5th and 7th of each month.",
     "salary slip": "Download your salary slip from LSIT HR portal under 'Payroll History', or check your email — sent monthly.",
+    "payslip": "Download your salary slip from LSIT HR portal under 'Payroll History', or check your email — sent monthly.",
     "salary not received": "Contact accounts@lsituoe.edu.pk immediately with your employee ID and the month.",
+    "salary not credited": "Contact accounts@lsituoe.edu.pk immediately with your employee ID and the month.",
     "update bank": "Submit new bank details to accounts department with proof, or update in LSIT HR portal under My Profile > Bank Details.",
+    "bank account": "Update your bank details in LSIT HR portal under My Profile > Bank Details, or submit proof to accounts department.",
     "provident fund": "Provident Fund: you contribute 10% of basic salary, LSIT matches 10%. PF statements available quarterly.",
     "increment": "Annual performance-based increment given in July, ranging from 5% to 15%.",
-    "contact hr": "HR: hr@lsituoe.edu.pk | Administration: administration@lsituoe.edu.pk | Payroll: accounts@lsituoe.edu.pk",
+    "salary increment": "Annual performance-based increment given in July, ranging from 5% to 15%.",
+
+    # Career & Training
     "training": "LSIT offers: AWS/Azure/Google Cloud certifications, Leadership Development, Soft Skills Workshops, and Mentorship Program.",
     "career": "LSIT has three career tracks: Individual Contributor (technical), Management (leadership), and Technical Expert.",
+    "career development": "LSIT has three career tracks: Individual Contributor (technical), Management (leadership), and Technical Expert.",
+    "courses available": "LSIT offers: AWS/Azure/Google Cloud certifications, Leadership Development, Soft Skills Workshops, and Mentorship Program.",
+
+    # Contact
+    "contact hr": "HR: hr@lsituoe.edu.pk | Administration: administration@lsituoe.edu.pk | Payroll: accounts@lsituoe.edu.pk",
+    "hr email": "HR: hr@lsituoe.edu.pk | Administration: administration@lsituoe.edu.pk | Payroll: accounts@lsituoe.edu.pk",
+    "hr contact": "HR: hr@lsituoe.edu.pk | Administration: administration@lsituoe.edu.pk | Payroll: accounts@lsituoe.edu.pk",
 }
 
 
@@ -312,21 +367,21 @@ QUICK_ANSWERS = {
 def generate_answer(question: str) -> str:
     q_lower = question.lower().strip()
 
-    # 1. Quick keyword map
-    for key, response in QUICK_ANSWERS.items():
-        if key in q_lower:
-            return response
-
-    # 2. Simple greeting/ack
+    # 1. Greeting / acknowledgment
     simple = get_simple_response(question)
     if simple:
         return simple
+
+    # 2. Flexible quick keyword match
+    quick = match_quick_answer(q_lower)
+    if quick:
+        return quick
 
     # 3. No knowledge base — go straight to LLM
     if not knowledge_base:
         return llm_fallback(question)
 
-    # 4. RAG search
+    # 4. RAG semantic search
     relevant_docs = search_docs(question, top_k=3)
 
     if relevant_docs:
@@ -336,10 +391,11 @@ def generate_answer(question: str) -> str:
             if best_answer.startswith('Q:'):
                 best_answer = best_answer.split('A:')[-1].strip()
             return best_answer
+        # RAG found docs but no clean answer — use LLM with context
         context = "\n\n".join([d['content'] for d in relevant_docs[:2]])
         return llm_fallback(question, context)
 
-    # 5. RAG found nothing — LLM answers from general HR knowledge
+    # 5. Nothing matched — LLM from general HR knowledge
     return llm_fallback(question)
 
 
@@ -393,7 +449,8 @@ def predict(data: dict) -> dict:
         return {'status': 'success', 'data': {
             'knowledge_base_size': len(knowledge_base),
             'documents_loaded': len(knowledge_base) > 0,
-            'groq_available': bool(GROQ_API_KEY)
+            'groq_available': bool(GROQ_API_KEY),
+            'embeddings_ready': embeddings is not None,
         }}
 
     elif action == 'list_documents':
@@ -406,4 +463,20 @@ def predict(data: dict) -> dict:
 
 # ── CLI ────────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
-    print(f"Loaded: {len(knowledge_base)} chunks | Groq: {'enabled' if GROQ_API_KEY else 'disabled'}")
+    print("\n" + "=" * 50)
+    print("LSIT HR Assistant (RAG + Groq fallback)")
+    print("=" * 50)
+    print(f"Loaded: {len(knowledge_base)} chunks | Groq: {'enabled' if GROQ_API_KEY else 'disabled'} | Embeddings: {'ready' if embeddings is not None else 'disabled'}")
+    print("Type 'exit' to quit\n")
+    while True:
+        question = input("You: ").strip()
+        if question.lower() in ["exit", "quit", "bye"]:
+            print("Bot: Goodbye!")
+            break
+        if not question:
+            continue
+        start = datetime.now()
+        answer = generate_answer(question)
+        elapsed = (datetime.now() - start).total_seconds()
+        print(f"Bot: {answer}")
+        print(f"({elapsed:.2f}s)\n")
